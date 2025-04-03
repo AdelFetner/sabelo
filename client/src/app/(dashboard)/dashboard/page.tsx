@@ -4,6 +4,9 @@ import { Button } from "@/components/ui/button"
 import { ArrowLeft, ArrowRight, Bell, Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { MonthlySummary } from "@/components/dashboard/MonthlySummary"
+import { TransactionHistory } from "@/components/dashboard/TransactionHistory"
+import { Goals } from "@/components/dashboard/Goals"
 
 export const metadata: Metadata = {
     title: "Sabelo",
@@ -44,7 +47,9 @@ export default function DashboardPage() {
                 </h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    {/* monthly summary */}
+                    <MonthlySummary amount="5.2500 ARS" change={10} type="income" />
+                    <MonthlySummary amount="1.2750 ARS" change={-7} type="expenses" />
+                    <MonthlySummary amount="3.1850 ARS" change={10} type="savings" />
                 </div>
             </section>
 
@@ -66,7 +71,7 @@ export default function DashboardPage() {
                                     </TooltipContent>
                                 </Tooltip>
                                 {/* <span className="text-sm text-gray-400">{month ?? "Month unavailable"}</span> */}
-                                <span className="text-sm text-gray-400">Jan</span>
+                                <span className="text-sm text-gray-400 mx-2">Jan</span>
                                 <Tooltip>
                                     <TooltipTrigger asChild>
                                         <Button variant="outline" size="icon" className="h-8 w-8 bg-inherit hover:bg-[#1f2328] border-none">
@@ -103,7 +108,7 @@ export default function DashboardPage() {
                         </Button>
                     </CardHeader>
                     <CardContent>
-                        {/* transaction history */}
+                        <TransactionHistory />
                     </CardContent>
                 </Card>
 
@@ -112,7 +117,7 @@ export default function DashboardPage() {
                         <CardTitle className="text-white">Goals</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        {/* goals */}
+                        <Goals />
                     </CardContent>
                 </Card>
             </div>

@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import "./globals.css";
+import "../globals.css";
+import { Sidebar } from "@/components/app/Sidebar";
 
 const geistSans = localFont({
-    src: "./fonts/GeistVF.woff",
+    src: "../fonts/GeistVF.woff",
     variable: "--font-geist-sans",
     weight: "100 900",
 });
 const geistMono = localFont({
-    src: "./fonts/GeistMonoVF.woff",
+    src: "../fonts/GeistMonoVF.woff",
     variable: "--font-geist-mono",
     weight: "100 900",
 });
@@ -28,7 +29,10 @@ export default function RootLayout({
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen min-w-screen max-w-screen w-screen overflow-x-hidden bg-[#0F1110]`}
             >
-                {children}
+                <div className="flex flex-col md:flex-row min-h-screen bg-[#1a1f24]">
+                    <Sidebar />
+                    {children}
+                </div>
             </body>
         </html>
     );
