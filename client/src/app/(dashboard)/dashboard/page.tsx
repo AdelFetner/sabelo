@@ -34,9 +34,6 @@ export default function DashboardPage() {
                             <Bell className="h-5 w-5 text-gray-400" />
                             <span className="sr-only">Notifications</span>
                         </Button>
-                        <div className="h-10 w-10 rounded-full bg-gray-400 overflow-hidden">
-                            <img src="/placeholder.svg?height=40&width=40" alt="User profile" />
-                        </div>
                     </div>
                 </div>
             </header>

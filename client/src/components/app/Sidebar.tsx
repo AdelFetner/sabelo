@@ -1,6 +1,6 @@
 "use client"
 
-import { BarChart2, CreditCard, LayoutDashboard, LogIn, LogOut, Menu, Settings, X } from "lucide-react"
+import { BarChart2, ChevronRight, CreditCard, LayoutDashboard, LogIn, LogOut, Menu, Settings, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
@@ -36,16 +36,22 @@ export function Sidebar() {
             {/* Sidebar for mobile and desktop */}
             <nav
                 className={cn(
-                    "border-r border-[#2a2f36] p-4 flex flex-col",
+                    "bg-[#1a1f24] border-r border-[#2a2f36] p-4 flex flex-col",
                     "fixed inset-y-0 left-0 z-40 w-[250px] transform transition-transform duration-200 ease-in-out",
                     "md:relative md:translate-x-0",
                     isOpen ? "translate-x-0" : "-translate-x-full",
                 )}
             >
                 <div className="flex items-center gap-2 px-2 py-4">
-                    {/* temporary logo */}
-                    <div className="flex items-center justify-center h-8 w-8 rounded bg-[#0fcf9c] text-white font-bold">S</div>
-                    <span className="text-[#0fcf9c] font-bold text-xl">Sabelo</span>
+                    <div className="h-10 w-10 rounded-full bg-gray-400 overflow-hidden">
+                        <img src="/placeholder.svg?height=40&width=40" alt="User profile" />
+                    </div>
+                    <article className="text-gray-400 hover:text-white cursor-pointer w-auto">
+                        <p>{"Hello, ${user}"}</p>
+                        <span className="text-sm flex items-center gap-1">
+                            Your profile <ChevronRight size={16} />
+                        </span>
+                    </article>
                 </div>
 
                 <ul className="mt-8 space-y-1">
