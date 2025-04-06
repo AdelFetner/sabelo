@@ -29,7 +29,7 @@ export default function RootLayout({
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen min-w-screen max-w-screen w-screen overflow-x-hidden bg-[#0F1110]`}
             >
-                <div className="flex flex-col md:flex-row min-h-screen bg-[#1a1f24]">
+                <div className="flex flex-col md:flex-row min-h-screen">
                     <Sidebar />
                     {children}
                 </div>
