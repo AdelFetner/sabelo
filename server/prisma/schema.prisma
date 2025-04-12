@@ -1,0 +1,64 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id           String        @id @default(uuid())
+    email        String        @unique
+    passwordHash String
+    createdAt    DateTime      @default(now())
+    updatedAt    DateTime      @updatedAt
+    Account      Account[]
+    Transaction  Transaction[]
+    Budget       Budget[]
+}
+
+// an account is a specific bank/fintech acc, so it differs from user as in a user can have multiple accounts. It's a subtype of user
+model Account {
+    id          String        @id @default(uuid())
+    bankName    String
+    cbu         String
+    balance     Decimal       @default(0.00)
+    currency    String        @default("ARS")
+    alias       String?
+    userId      String
+    user        User          @relation(fields: [userId], references: [id])
+    createdAt   DateTime      @default(now())
+    deletedAt   DateTime?
+    Transaction Transaction[]
+}
+
+// enum for transaction type, there are only two types of transactions
+enum TransactionType {
+    INCOME
+    EXPENSE
+}
+
+model Transaction {
+    id          String          @id @default(uuid())
+    amount      Decimal
+    type        TransactionType
+    category    String?         @default("uncategorized")
+    description String?
+    date        DateTime        @default(now())
+    userId      String
+    user        User            @relation(fields: [userId], references: [id])
+    accountId   String?
+    account     Account?        @relation(fields: [accountId], references: [id])
+}
+
+model Budget {
+    id        String   @id @default(uuid())
+    name      String
+    limit     Decimal
+    category  String?
+    startDate DateTime
+    endDate   DateTime
+    userId    String
+    user      User     @relation(fields: [userId], references: [id])
+}
