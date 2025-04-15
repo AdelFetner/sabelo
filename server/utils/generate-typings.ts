@@ -8,4 +8,5 @@ definitionsFactory.generate({
   outputAs: 'class',
   watch: true,
   emitTypenameField: true,
+  skipResolverArgs: true,
 });
