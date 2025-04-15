@@ -2,7 +2,7 @@ type User {
   id: ID!
   email: String!
   passwordHash: String!
-  #   accounts: [Account!]
+  accounts: [Account!]
   #   transactions: [Transaction!]
   #   budgets: [Budget!]
   createdAt: String!
@@ -29,7 +29,6 @@ type Query {
 }
 
 type Mutation {
-  createUser(input: CreateUserInput!): User!
   updateUser(id: ID!, input: UpdateUserInput!): User!
   removeUser(input: RemoveUserInput!): User!
 }

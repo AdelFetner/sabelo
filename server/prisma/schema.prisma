@@ -22,12 +22,12 @@ model User {
 model Account {
     id          String        @id @default(uuid())
     bankName    String
-    cbu         String
+    cbu         String        @unique
     balance     Decimal       @default(0.00)
     currency    String        @default("ARS")
-    alias       String?
+    alias       String?       @unique
     userId      String
-    user        User          @relation(fields: [userId], references: [id])
+    User        User          @relation(fields: [userId], references: [id])
     createdAt   DateTime      @default(now())
     deletedAt   DateTime?
     Transaction Transaction[]
@@ -47,9 +47,9 @@ model Transaction {
     description String?
     date        DateTime        @default(now())
     userId      String
-    user        User            @relation(fields: [userId], references: [id])
+    User        User            @relation(fields: [userId], references: [id])
     accountId   String?
-    account     Account?        @relation(fields: [accountId], references: [id])
+    Account     Account?        @relation(fields: [accountId], references: [id])
 }
 
 model Budget {
@@ -60,5 +60,5 @@ model Budget {
     startDate DateTime
     endDate   DateTime
     userId    String
-    user      User     @relation(fields: [userId], references: [id])
+    User      User     @relation(fields: [userId], references: [id])
 }
