@@ -4,118 +4,72 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
-import { Prisma, Account } from '@prisma/client';
+import { CreateAccountDto } from './dto/create-account.dto';
+import { UpdateAccountDto } from './dto/update-account.dto';
 
 @Injectable()
 export class AccountsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  private async validateCbuUnique(uncheckedCbu: string) {
-    const existingAccount = await this.prisma.account.findUnique({
-      where: { cbu: uncheckedCbu },
-    });
-
-    if (existingAccount) {
-      throw new ConflictException(`CBU ${uncheckedCbu} already exists`);
-    }
+  private async validateCbuUnique(cbu: string) {
+    const exists = await this.prisma.account.findUnique({ where: { cbu } });
+    if (exists) throw new ConflictException(`CBU ${cbu} exists`);
   }
 
-  async create(
-    userId: string,
-    input: Omit<Prisma.AccountCreateInput, 'User'>,
-  ): Promise<Account> {
-    try {
-      await this.validateCbuUnique(input.cbu);
+  async create(dto: CreateAccountDto) {
+    await this.validateCbuUnique(dto.cbu);
 
-      return await this.prisma.account.create({
-        data: {
-          ...input,
-          balance: 0.0,
-          User: { connect: { id: userId } },
-        },
-      });
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2002') {
-          throw new ConflictException('CBU already exists');
-        }
-      }
-      throw error;
-    }
-  }
-
-  async findOne(id: string): Promise<Account> {
-    const account = await this.prisma.account.findUnique({
-      where: { id },
-      include: {
-        User: true,
-        Transaction: true,
+    return this.prisma.account.create({
+      data: {
+        bankName: dto.bankName,
+        cbu: dto.cbu,
+        currency: dto.currency,
+        alias: dto.alias,
+        balance: 0.0,
+        User: { connect: { id: dto.userId } },
       },
     });
+  }
 
-    if (!account) {
-      throw new NotFoundException(`Account with ID ${id} not found`);
-    }
+  async findAll(userId: string) {
+    return this.prisma.account.findMany({
+      where: { userId, deletedAt: null },
+      include: { Transaction: true },
+    });
+  }
 
+  async findOne(id: string) {
+    const account = await this.prisma.account.findUnique({
+      where: { id, deletedAt: null },
+      include: { User: true, Transaction: true },
+    });
+    if (!account) throw new NotFoundException(`Account ${id} not found`);
     return account;
   }
 
-  async findAll(userId: string): Promise<Account[]> {
-    return this.prisma.account.findMany({
-      where: { userId },
-      include: {
-        User: true,
-        Transaction: true,
-      },
+  async update(id: string, dto: UpdateAccountDto) {
+    if (dto.cbu) await this.validateCbuUnique(dto.cbu);
+
+    return this.prisma.account.update({
+      where: { id },
+      data: dto,
     });
   }
 
-  async update(id: string, input: Prisma.AccountUpdateInput): Promise<Account> {
-    try {
-      const updateData: Prisma.AccountUpdateInput = {};
-
-      if (input.cbu && typeof input.cbu === 'string') {
-        await this.validateCbuUnique(input.cbu);
-        updateData.cbu = input.cbu;
-      }
-
-      if (input.bankName) updateData.bankName = input.bankName;
-      if (input.currency) updateData.currency = input.currency;
-      if (input.alias) updateData.alias = input.alias;
-
-      if (Object.keys(updateData).length === 0) {
-        throw new Error('No valid fields provided for update');
-      }
-
-      return await this.prisma.account.update({
-        where: { id },
-        data: updateData,
+  async remove(id: string) {
+    return this.prisma.$transaction(async (tx) => {
+      await tx.transaction.updateMany({
+        where: { accountId: id },
+        data: { accountId: null },
       });
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2025') {
-          throw new NotFoundException('Account not found');
-        }
-        if (error.code === 'P2002') {
-          throw new ConflictException('CBU already exists');
-        }
-      }
-      throw error;
-    }
-  }
 
-  async remove(id: string): Promise<Account> {
-    try {
-      return await this.prisma.account.delete({
+      return tx.account.update({
         where: { id },
+        data: {
+          deletedAt: new Date(),
+          alias: null,
+        },
       });
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2025') {
-          throw new NotFoundException('Account not found');
-        }
-      }
-      throw error;
-    }
+    });
   }
 }

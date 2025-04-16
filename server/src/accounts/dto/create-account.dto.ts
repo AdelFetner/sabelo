@@ -22,5 +22,6 @@ export class CreateAccountDto {
   alias?: string;
 
   @Field()
+  @IsString()
   userId: string;
 }

@@ -1,21 +1,17 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Account } from './models/account.model';
 import { AccountsService } from './accounts.service';
-import { Account, RemoveAccountInput } from 'src/graphql.schema';
-import { UpdateAccountDto } from './dto/update-account-dto';
-import { CreateAccountDto } from './dto/create-account-dto';
+import { CreateAccountDto } from './dto/create-account.dto';
+import { UpdateAccountDto } from './dto/update-account.dto';
+import { RemoveAccountDto } from './dto/remove-account.dto';
 
-@Resolver('Account')
+@Resolver(() => Account)
 export class AccountsResolver {
   constructor(private readonly accountsService: AccountsService) {}
 
   @Mutation(() => Account)
   createAccount(@Args('input') input: CreateAccountDto) {
-    return this.accountsService.create(input.userId, {
-      bankName: input.bankName,
-      cbu: input.cbu,
-      currency: input.currency,
-      alias: input.alias,
-    });
+    return this.accountsService.create(input);
   }
 
   @Query(() => [Account])
@@ -33,19 +29,11 @@ export class AccountsResolver {
     @Args('id') id: string,
     @Args('input') input: UpdateAccountDto,
   ) {
-    // Convert null values to undefined to match expected prisma types
-    const prismaInput = {
-      bankName: input.bankName ?? undefined,
-      cbu: input.cbu ?? undefined,
-      currency: input.currency ?? undefined,
-      alias: input.alias ?? undefined,
-    };
-
-    return this.accountsService.update(id, prismaInput);
+    return this.accountsService.update(id, input);
   }
 
   @Mutation(() => Account)
-  removeAccount(@Args('input') input: RemoveAccountInput) {
+  removeAccount(@Args('input') input: RemoveAccountDto) {
     return this.accountsService.remove(input.id);
   }
 }
