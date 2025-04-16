@@ -49,7 +49,7 @@ model Transaction {
     userId      String
     User        User            @relation(fields: [userId], references: [id])
     accountId   String?
-    Account     Account?        @relation(fields: [accountId], references: [id])
+    Account     Account?        @relation(fields: [accountId], references: [id], onDelete: SetNull)
 }
 
 model Budget {
