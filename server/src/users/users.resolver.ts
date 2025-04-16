@@ -1,15 +1,16 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { User } from './models/user.model';
 import { UsersService } from './users.service';
-import { RemoveUserInput, User } from '../graphql.schema';
-import { CreateUserValidation } from './dto/create-user-dto';
-import { UpdateUserValidation } from './dto/update-user-dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { RemoveUserDto } from './dto/remove-user.dto';
 
-@Resolver('User')
+@Resolver(() => User)
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
   @Mutation(() => User)
-  createUser(@Args('input') input: CreateUserValidation) {
+  createUser(@Args('input') input: CreateUserDto) {
     return this.usersService.create(input);
   }
 
@@ -24,15 +25,12 @@ export class UsersResolver {
   }
 
   @Mutation(() => User)
-  updateUser(
-    @Args('id') id: string,
-    @Args('input') input: UpdateUserValidation,
-  ) {
+  updateUser(@Args('id') id: string, @Args('input') input: UpdateUserDto) {
     return this.usersService.update(id, input);
   }
 
   @Mutation(() => User)
-  removeUser(@Args('input') input: RemoveUserInput) {
+  removeUser(@Args('input') input: RemoveUserDto) {
     return this.usersService.remove(input.id);
   }
 }
