@@ -15,6 +15,7 @@ export class TransactionsService {
     filters?: TransactionFilterInput,
   ): Prisma.TransactionWhereInput {
     return {
+      userId: filters?.userId,
       type: filters?.type,
       category: filters?.category,
       date: {
@@ -31,11 +32,7 @@ export class TransactionsService {
     filters?: TransactionFilterInput,
   ): Promise<TransactionPagination> {
     const skip = (page - 1) * pageSize;
-    const where: Prisma.TransactionWhereInput = {
-      userId,
-      ...this.convertFiltersToWhere(filters),
-      Account: { deletedAt: null },
-    };
+    const where = this.convertFiltersToWhere({ ...filters, userId });
 
     const [transactions, total] = await Promise.all([
       this.prisma.transaction.findMany({
@@ -173,5 +170,19 @@ export class TransactionsService {
       }
     }
     throw error;
+  }
+
+  // frontend functions
+  async getTransactionCurrency(transactionId: string): Promise<string> {
+    const transaction = await this.prisma.transaction.findUnique({
+      where: { id: transactionId },
+      select: { Account: { select: { currency: true } } },
+    });
+
+    if (!transaction) {
+      throw new NotFoundException(`Transaction ${transactionId} not found`);
+    }
+
+    return transaction.Account?.currency || 'ARS';
   }
 }

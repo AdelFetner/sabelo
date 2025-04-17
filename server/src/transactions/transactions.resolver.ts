@@ -6,6 +6,7 @@ import {
   ID,
   ResolveField,
   Parent,
+  Int,
 } from '@nestjs/graphql';
 import { TransactionsService } from './transactions.service';
 import { Transaction } from './models/transaction.model';
@@ -39,9 +40,10 @@ export class TransactionsResolver {
   @Query(() => TransactionPagination, { name: 'transactions' })
   async findPaginated(
     @Args('userId', { type: () => ID }) userId: string,
-    @Args('page', { defaultValue: 1 }) page: number,
-    @Args('pageSize', { defaultValue: 50 }) pageSize: number,
-    @Args('filters', { nullable: true }) filters?: TransactionFilterInput,
+    @Args('page', { type: () => Int, defaultValue: 1 }) page: number,
+    @Args('pageSize', { type: () => Int, defaultValue: 50 }) pageSize: number,
+    @Args('filters', { nullable: true, type: () => TransactionFilterInput })
+    filters?: TransactionFilterInput,
   ) {
     if (page < 1) throw new BadRequestException('Page must be greater than 0');
     if (pageSize < 1 || pageSize > 100) {
@@ -61,15 +63,22 @@ export class TransactionsResolver {
     return this.transactionsService.findOne(id);
   }
 
-  @ResolveField(() => User)
-  User(@Parent() transaction: Transaction) {
+  @ResolveField(() => User, { name: 'user' })
+  resolveUser(@Parent() transaction: Transaction) {
     return this.transactionsService.getTransactionUser(transaction.id);
   }
 
-  @ResolveField(() => Account, { nullable: true })
-  account(@Parent() transaction: Transaction) {
+  @ResolveField(() => Account, { name: 'account', nullable: true })
+  resolveAccount(@Parent() transaction: Transaction) {
     return transaction.accountId
       ? this.transactionsService.getTransactionAccount(transaction.id)
       : null;
+  }
+
+  @ResolveField(() => String)
+  currency(@Parent() transaction: Transaction) {
+    return transaction.accountId
+      ? this.transactionsService.getTransactionCurrency(transaction.id)
+      : 'ARS';
   }
 }
