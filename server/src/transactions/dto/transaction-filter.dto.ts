@@ -22,4 +22,7 @@ export class TransactionFilterInput {
   @IsISO8601()
   @IsOptional()
   date_lte?: Date;
+
+  @Field()
+  userId?: string;
 }

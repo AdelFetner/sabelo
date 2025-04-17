@@ -1,4 +1,4 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { ObjectType, Field } from '@nestjs/graphql';
 import { Transaction } from 'src/transactions/models/transaction.model';
 
 @ObjectType()
@@ -6,15 +6,15 @@ export class TransactionPagination {
   @Field(() => [Transaction])
   items: Transaction[];
 
-  @Field(() => Int)
+  @Field()
   total: number;
 
   @Field()
   hasNextPage: boolean;
 
-  @Field(() => Int)
+  @Field()
   currentPage: number;
 
-  @Field(() => Int)
+  @Field()
   totalPages: number;
 }

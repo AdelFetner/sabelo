@@ -41,5 +41,5 @@ export class Transaction extends BaseModel {
   accountId?: string;
 
   @Field(() => Account, { nullable: true })
-  Account?: Account | null;
+  Account?: Account;
 }
