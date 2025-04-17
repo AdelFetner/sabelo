@@ -12,10 +12,16 @@ async function bootstrap() {
     }),
   );
 
+  const allowedOrigins = [
+    'https://sabelo-mu.vercel.app', // hosted URL
+    'http://localhost:3001', // local development
+  ];
+
   app.enableCors({
-    origin: ['http://localhost:3001'],
+    origin: allowedOrigins,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
+    allowedHeaders: 'Content-Type,Authorization',
   });
 
   await app.listen(3000);

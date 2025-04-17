@@ -10,6 +10,19 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { useState } from 'react';
 import { GET_RECENT_TRANSACTIONS } from '@/lib/gql/transactions';
 
+interface Transaction {
+    id: string;
+    description: string;
+    category: string;
+    account?: {
+        bankName: string;
+        currency: string;
+    };
+    date: string;
+    type: 'INCOME' | 'EXPENSE';
+    amount: string;
+}
+
 export function TransactionHistory() {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -36,11 +49,6 @@ export function TransactionHistory() {
             currency: currency || 'ARS',
             minimumFractionDigits: 2
         }).format(parseFloat(amount));
-    };
-
-    const shortenCbu = (cbu?: string) => {
-        if (!cbu) return 'N/A';
-        return `${cbu.slice(0, 4)}****${cbu.slice(-4)}`;
     };
 
     const handlePreviousPage = () => {
@@ -125,7 +133,7 @@ export function TransactionHistory() {
                                     <TableCell><Skeleton className="h-4 w-[80px]" /></TableCell>
                                 </TableRow>
                             ))
-                        ) : data?.transactions.items.map((tx) => (
+                        ) : data?.transactions.items.map((tx: Transaction) => (
                             <TableRow key={tx.id}>
                                 <TableCell className="font-medium">
                                     {tx.description || 'No description'}
