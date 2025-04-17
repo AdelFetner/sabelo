@@ -12,6 +12,8 @@ export function Sidebar() {
     const [isOpen, setIsOpen] = useState(false)
     const [isLogged, setIsLogged] = useState(false)
 
+    console.log(setIsLogged)
+
     const navigation = [
         { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
         { name: "My Cards", href: "/cards", icon: CreditCard },
