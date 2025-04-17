@@ -62,7 +62,7 @@ export class TransactionsResolver {
   }
 
   @ResolveField(() => User)
-  user(@Parent() transaction: Transaction) {
+  User(@Parent() transaction: Transaction) {
     return this.transactionsService.getTransactionUser(transaction.id);
   }
 

@@ -34,10 +34,11 @@ export class UsersService {
 
   async findAll() {
     return this.prisma.user.findMany({
-      include: {
-        Account: true,
-        Budget: true,
-        Transaction: true,
+      select: {
+        id: true,
+        email: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
   }
@@ -45,7 +46,12 @@ export class UsersService {
   async findOne(id: string) {
     const user = await this.prisma.user.findUnique({
       where: { id },
-      include: { Account: true },
+      select: {
+        id: true,
+        email: true,
+        createdAt: true,
+        updatedAt: true,
+      },
     });
     if (!user) throw new NotFoundException(`User ${id} not found`);
     return user;

@@ -12,8 +12,8 @@ export class User extends BaseModel {
   @Field()
   passwordHash: string;
 
-  @Field(() => [Account])
-  accounts: Account[];
+  @Field(() => [Account], { nullable: true })
+  accounts?: Account[];
 
   @Field(() => [Transaction])
   transactions: Transaction[];

@@ -17,9 +17,14 @@ export class CreateAccountDto {
   @Length(3, 3)
   currency: string;
 
-  @Field({ nullable: true })
+  @Field({ defaultValue: '0.00' })
   @IsString()
-  alias?: string;
+  @Length(1, 20)
+  balance: string;
+
+  @Field()
+  @IsString()
+  alias: string;
 
   @Field()
   @IsString()

@@ -11,8 +11,8 @@ export class Account extends BaseModel {
   @Field()
   cbu: string;
 
-  @Field(() => String)
-  balance: number;
+  @Field(() => String, { defaultValue: '0.00' })
+  balance: string;
 
   @Field()
   currency: string;
@@ -21,10 +21,10 @@ export class Account extends BaseModel {
   alias?: string;
 
   @Field(() => User)
-  user: User;
+  User: User;
 
   @Field(() => [Transaction], { nullable: true })
-  transactions?: Transaction[];
+  Transaction?: Transaction[];
 
   @Field({ nullable: true })
   deletedAt?: Date;

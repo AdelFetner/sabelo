@@ -25,16 +25,22 @@ export class AccountsService {
         cbu: dto.cbu,
         currency: dto.currency,
         alias: dto.alias,
-        balance: 0.0,
+        balance: dto.balance,
         User: { connect: { id: dto.userId } },
       },
+      include: { User: true, Transaction: true },
     });
   }
 
   async findAll(userId: string) {
     return this.prisma.account.findMany({
-      where: { userId, deletedAt: null },
-      include: { Transaction: true },
+      where: {
+        userId,
+        deletedAt: null,
+      },
+      include: {
+        User: true,
+      },
     });
   }
 
