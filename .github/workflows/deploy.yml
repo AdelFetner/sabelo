@@ -30,20 +30,16 @@ jobs:
                   docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/sabelo/sabeloapp -f server/DOCKERFILE ./server
                   docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/sabelo/sabeloapp
 
-            - name: Create env file
-              run: |
-                  echo "NODE_ENV=production" > env.yaml
-                  echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> env.yaml
-                  echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> env.yaml
-                  echo "GCP_BUCKET_NAME=${{ secrets.GCP_BUCKET_NAME }}" >> env.yaml
-                  echo "GCP_BASE_URL=${{ secrets.GCP_BASE_URL }}" >> env.yaml
-
             - name: Deploy to Cloud Run
               run: |
                   gcloud run deploy sabeloapp \
-                    --image us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/sabelo/sabeloapp \
-                    --platform managed \
-                    --region us-central1 \
-                    --allow-unauthenticated \
-                    --service-account github-actions@${{ secrets.GCP_PROJECT }}.iam.gserviceaccount.com \
-                    --env-vars-file env.yaml
+                  --image us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/sabelo/sabeloapp \
+                  --platform managed \
+                  --region us-central1 \
+                  --allow-unauthenticated \
+                  --service-account github-actions@${{ secrets.GCP_PROJECT }}.iam.gserviceaccount.com \
+                  --update-env-vars NODE_ENV=production \
+                  --update-env-vars DATABASE_URL='${{ secrets.DATABASE_URL }}' \
+                  --update-env-vars JWT_SECRET='${{ secrets.JWT_SECRET }}' \
+                  --update-env-vars GCP_BUCKET_NAME='${{ secrets.GCP_BUCKET_NAME }}' \
+                  --update-env-vars GCP_BASE_URL='${{ secrets.GCP_BASE_URL }}'
