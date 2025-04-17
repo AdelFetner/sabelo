@@ -36,7 +36,7 @@ export function Sidebar() {
             {/* Sidebar for mobile and desktop */}
             <nav
                 className={cn(
-                    "bg-[#1a1f24] border-r border-[#2a2f36] p-4 flex flex-col",
+                    "border-r border-[#2a2f36] p-4 flex flex-col",
                     "fixed inset-y-0 left-0 z-40 w-[250px] transform transition-transform duration-200 ease-in-out",
                     "md:relative md:translate-x-0",
                     isOpen ? "translate-x-0" : "-translate-x-full",

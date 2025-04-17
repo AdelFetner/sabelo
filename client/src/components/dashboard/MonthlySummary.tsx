@@ -12,7 +12,7 @@ export function MonthlySummary({ amount, change, type }: MonthlySummaryProps) {
     const changeText = `${isPositive ? "+" : ""}${change}%`
 
     return (
-        <Card className={`border-none bg-[#2a2f36]`}>
+        <Card>
             <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-gray-400">Monthly {type}</CardTitle>
             </CardHeader>
