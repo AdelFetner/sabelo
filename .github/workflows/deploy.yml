@@ -27,13 +27,13 @@ jobs:
 
             - name: Build and send image to Artifact Registry
               run: |
-                  docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/sabelo/sabeloApp -f server/Dockerfile ./server
-                  docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/sabelo/sabeloApp
+                  docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/sabelo/sabeloapp -f server/Dockerfile ./server
+                  docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/sabelo/sabeloapp
 
             - name: Deploy to Cloud Run
               run: |
-                  gcloud run deploy sabeloApp \
-                    --image us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/sabelo/sabeloApp \
+                  gcloud run deploy sabeloapp \
+                    --image us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/sabelo/sabeloapp \
                     --platform managed \
                     --region us-central1 \
                     --allow-unauthenticated \
