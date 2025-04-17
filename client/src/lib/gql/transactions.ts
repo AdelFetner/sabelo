@@ -8,9 +8,8 @@ export const GET_RECENT_TRANSACTIONS = gql`
                 amount
                 type
                 date
-                user {
-                    email
-                }
+                description
+                category
                 account {
                     bankName
                     cbu
@@ -20,6 +19,7 @@ export const GET_RECENT_TRANSACTIONS = gql`
             total
             currentPage
             totalPages
+            hasNextPage
         }
     }
 `;
