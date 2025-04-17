@@ -47,9 +47,9 @@ export default function DashboardPage() {
             </section>
 
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-                <Card className="col-span-1 md:col-span-8 text-white">
+                <Card className="col-span-1 md:col-span-8">
                     <CardHeader className="flex flex-row items-center justify-between pb-2">
-                        <CardTitle className="text-white">Fund Flow</CardTitle>
+                        <CardTitle>Fund Flow</CardTitle>
                         <TooltipProvider>
                             <div className="flex items-center gap-1">
                                 <Tooltip>
@@ -94,15 +94,7 @@ export default function DashboardPage() {
                 </Card>
 
                 <Card className="col-span-1 md:col-span-8">
-                    <CardHeader className="flex flex-row items-center justify-between pb-2">
-                        <CardTitle>Transaction History</CardTitle>
-                        <Button variant="link" className="text-sm text-gray-400 p-0">
-                            Recent
-                        </Button>
-                    </CardHeader>
-                    <CardContent>
-                        <TransactionHistory />
-                    </CardContent>
+                    <TransactionHistory />
                 </Card>
 
                 <Card className="col-span-1 md:col-span-4">
@@ -114,7 +106,7 @@ export default function DashboardPage() {
                     </CardContent>
                 </Card>
             </div>
-        </main>
+        </main >
     )
 }
 

@@ -19,6 +19,7 @@ const config: Config = {
                 primary: "var(--primary)",
                 secondary: "var(--secondary)",
                 text: "var(--card-foreground)",
+                muted: "var(--muted)",
             },
             borderRadius: {
                 lg: "var(--radius)",

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "../globals.css";
 import { Sidebar } from "@/components/app/Sidebar";
+import { Providers } from "../providers";
 
 export const metadata: Metadata = {
     title: {
@@ -16,9 +17,11 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <div className="flex flex-col md:flex-row min-h-screen w-full">
-            <Sidebar />
-            {children}
-        </div>
+        <Providers>
+            <div className="flex flex-col md:flex-row min-h-screen w-full">
+                <Sidebar />
+                {children}
+            </div>
+        </Providers>
     );
 }

@@ -21,7 +21,7 @@ export function Goals() {
             {goals.map((goal) => (
                 <div key={goal.name} className="space-y-2">
                     <div className="flex items-center justify-between">
-                        <span className="text-white">{goal.name}</span>
+                        <span>{goal.name}</span>
                         <span className="text-gray-400">{goal.progress}%</span>
                     </div>
                     <Progress value={goal.progress} className="h-2 bg-[#374151]" />
